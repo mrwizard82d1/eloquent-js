@@ -3,13 +3,7 @@
  */
 
 function countBs(aString) {
-    var result = 0;
-    for (var i = 0; i < aString.length; i++) {
-        if (aString.charAt(i) === 'B') {
-            result++;
-        }
-    }
-    return result;
+    return countChar(aString, 'B');
 }
 
 console.log("B's in 'BBB' ", countBs('BBB'));
