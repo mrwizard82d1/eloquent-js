@@ -3,21 +3,44 @@
  */
 
 function range(start, end) {
+    var step = 1;
+    if (arguments.length > 2) {
+        step = arguments[2];
+    }
     var result = [];
-    for (var i = start; i <= end; i++) {
+    for (var i = start; (step >= 0 ? i <= end : i >= end); i += step) {
         result.push(i);
     }
     return result;
 }
 
-var range0To0 = range(0, 0);
-console.log("range(0, 0) is [0]? ", (range0To0.length == 1 && range0To0[0] == 0));
-var range0To1 = range(0, 1);
-console.log("range(0, 1) is [0, 1]? ", (range0To1.length == 2 && range0To1[0] == 0 && range0To1[1] == 1));
-var range1To4 = range(1, 4);
-console.log("range(1, 4) is [1, 2, 3, 4]? ",
-    (range1To4.length == 4 && range1To4[0] == 1 && range1To4[1] == 2 && range1To4[2] == 3 && range1To4[3] == 4));
-console.log("range(0, -1) is empty? ", (range(0, -1).length == 0));
+function equalArrays(left, right) {
+    var result = false;
+
+    if (left.length != right.length) {
+        return result;
+    }
+
+    // Assume they are equal
+    result = true;
+    for (var i = 0; i < left.length; i++) {
+        if (left[i] != right[i]) {
+            // And prove they are **not**
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
+console.log("range(0, 0) is [0]? ", equalArrays(range(0, 0), [0]));
+console.log("range(0, 1) is [0, 1]? ", equalArrays(range(0, 1), [0, 1]));
+console.log("range(1, 4) is [1, 2, 3, 4]? ", equalArrays(range(1, 4), [1, 2, 3, 4]));
+console.log("range(0, -1) is empty? ", equalArrays(range(0, -1), []));
+console.log("range(1, 10, 2) is [1, 3, 5, 7, 9]? ", equalArrays(range(1, 10, 2), [1, 3, 5, 7, 9]));
+console.log("range(5, 2, -1 is [5, 4, 3, 2]? ", equalArrays(range(5, 2, -1), [5, 4, 3, 2]));
+console.log("range(0, 1, -1) is empty? ", equalArrays(range(0, 1, -1), []));
+console.log();
 
 function sum(anArray) {
     var total = 0;
