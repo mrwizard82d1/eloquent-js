@@ -11,7 +11,7 @@ function heightOfRow(row) {
 // I need to figure out how to remove these details from the global name space!
 var emptyTestRow = [];
 var singleTestRow = [{minHeight: function() { return 7; }}];
-var manyTestRow = [{minHeight: function() { return 3; }}, 
+var manyTestRow = [{minHeight: function() { return 3; }},
 	{minHeight: function() { return 1; }}, {minHeight: function() { return 4; }}];
 
 (function testHeightsOfRows(){
@@ -161,6 +161,9 @@ TextCell.prototype.draw = function(width, height) {
 	return result;
 }
 
+/*
+ * Print out a "checkerboard."
+ */
 var rows = [];
 for (var i = 0; i < 5; i++) {
 	var row = [];
@@ -175,3 +178,55 @@ for (var i = 0; i < 5; i++) {
 	rows.push(row);
 }
 console.log(drawTable(rows));
+
+/*
+ * Create an `UnderlinedCell`
+ *
+ * This cell wraps another cell underlining it with dashes.
+ *
+ */
+function UnderlinedCell(wrapped) {
+	this.wrapped = wrapped;
+}
+
+/*
+ * The minimum width of an `UnderlinedCell` is the minimum width of its wrapped cell.
+ */
+UnderlinedCell.prototype.minWidth = function() {
+	return this.wrapped.minWidth();
+}
+
+/*
+ * The minimum height of an `UnderlinedCell` is the minimum height of its wrapped cell plus one for underlining.
+ */
+UnderlinedCell.prototype.minHeight = function() {
+	return this.wrapped.minHeight() + 1;
+}
+
+/*
+ * Drawing an `UnderlinedCell` draws the wrapped cell followed by the dashes.
+ */
+UnderlinedCell.prototype.draw = function(width, height) {
+	return this.wrapped.draw(width, height - 1).concat([repeat('-', width)]);
+}
+
+/*
+ * Create a data table.
+ */
+function dataTable(data) {
+	var keys = Object.keys(data[0]);
+	var headers = keys.map(function(name) {
+		return new UnderlinedCell(new TextCell(name));
+	});
+	var body = data.map(function(row) {
+		return keys.map(function(name) {
+			return new TextCell(String(row[name]));
+		});
+	});
+	return [headers].concat(body);
+}
+
+/*
+ * Print out the table of mountains.
+ */
+console.log(drawTable(dataTable(MOUNTAINS)));
