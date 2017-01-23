@@ -1,0 +1,7 @@
+for f in numbers.js arithmetic.js special_numbers.js strings.js \
+        unary.js boolean.js logical_operators.js undefined.js; do
+    if ! node ch01/$f; then
+        echo Error executing $f
+        exit 1
+    fi
+done
